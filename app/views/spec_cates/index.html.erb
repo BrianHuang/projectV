@@ -1,0 +1,34 @@
+<section class="row-fluid">
+  <h3 class="box-header">製程分類列表</h3>
+  <div class="box">
+    <div class="box-action btn-group">
+      <%= link_to "新增" , new_spec_cate_path , :class => "btn btn-blue" %>
+    </div>
+    <table class="table table-bordered table-striped table-condensed table-hover">
+      <thead>
+        <tr>
+          
+          <th class="col2">ID</th>
+          <th class="col2">排序</th>
+          <th>名稱</th>
+          <th class="col5">管理</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        <% @cates.each do |cate| %>                     
+          <tr>
+            
+            <td class="center"><%= cate.id %></td>
+            <td class="center"><%= cate.order %></td>
+            <td class="center"><%= cate.name %></td>
+            <td class="center">
+              <%= link_to "編輯" , edit_spec_cate_path(cate) , :class => "btn btn-cyan" %>
+              <%= link_to "刪除" , spec_cate_path(cate) , :method => "delete" , :class => "btn btn-danger" , :"data-confirm" => "確定進行刪除的動作？" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</section>

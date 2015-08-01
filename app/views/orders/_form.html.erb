@@ -1,0 +1,163 @@
+<% content_for :header do %>
+  <script>
+  // 當目前動作為edit時,需取消自動帶入資料
+  function change_customer(){
+    var id = parseInt($('#order_customer_id').find('option:selected').attr('value'));
+    if (isNaN(id)){
+      $('#order_name').val('');
+      $('#order_country_id').val('');
+      $('#order_addr').val('');
+      $('#order_contact').val('');
+      $('#order_email').val('');
+      $('#order_phone').val('');
+      $('#order_fax').val('');
+    }
+    else {
+      $.getJSON('/customers/' + id + '/customer_data' , function(json){
+        $('#order_name').val(json['name']);
+        $('#order_country_id').val(json['country_id']);
+        $('#order_addr').val(json['addr']);
+        $('#order_contact').val(json['contact']);
+        $('#order_email').val(json['email']);
+        $('#order_phone').val(json['phone']);
+        $('#order_fax').val(json['fax']);
+      });
+    }
+  }
+  
+  function rebuild_index(){
+    var tr = $('.item_table tbody tr').not('.template');
+    for(var i = 0 ; i < tr.length ; i++){
+      $(tr[i]).find('td').first().html(i + 1);
+    }
+  }
+  
+  function table_sum(){
+    var sum_qty = 0;
+    var sum_amount = 0.0;
+    var rows = $('.item_table tbody tr').not('.template');
+    for(var i = 0 ; i < rows.length ; i++){
+      var row = $(rows[i]);
+      var qty = parseInt(row.find('input[name="order_item[qty][]"]').val());
+      var price = parseInt(row.find('input[name="order_item[price][]"]').val());
+      if(qty && price){
+        sum_qty += qty;
+        sum_amount += qty * price;
+      }
+    }
+    $('.sum_qty').html(sum_qty);
+    $('.sum_amount').html(sum_amount);
+  }
+  
+  function clone_template(){
+    var template = $('.template').clone();
+    template.css({'display' : ''}).removeClass('hide').removeClass('template');
+    template.find('.add_row').click(clone_template);
+    template.find('.del_row').click(function(){
+      $(this).parent().parent().remove();
+      rebuild_index();
+      table_sum();
+    });
+
+    template.find('select').change(function(){
+      $(this).parent().parent()
+        .find('input[name="order_item[price][]"]')
+        .val($(this).find('option:selected').attr('data-value'));
+      table_sum();
+    });
+  
+    template.find('input[name="order_item[qty][]"] , input[name="order_item[price][]"]').change(function(){
+      var parent = $(this).parent().parent();
+      var qty = parseInt(parent.find('input[name="order_item[qty][]"]').val()) || 0;
+      var price = parseFloat(parent.find('input[name="order_item[price][]"]').val()) || 0.0;
+      parent.find('.amount').html(qty * price);
+      table_sum();
+    });
+  
+    $('.item_table tbody').append(template);
+    rebuild_index();
+    table_sum();
+  }
+  
+  
+  jQuery(function($){
+    $('#order_customer_id').change(change_customer);
+    change_customer();
+    clone_template();
+  });
+  
+</script>
+<% end %>
+<div class="row-fluid">
+  <div class="span2">
+    <%= f.input :customer_id , :label => "客戶名稱" , :prompt => false, :input_html => { :class => "input-medium"}, :collection => [["請選擇客戶"]] +
+    Customer.select('id,name').order('name ASC').map{|customer|[customer.name , customer.id]} %>
+    <%= f.input :contact, :label => "聯絡人", :input_html => { :class => "input-medium"} %>
+    <%= f.input :name , :as => :hidden, :input_html => { :value => ""}%>
+  </div>
+  <div class="span3">
+    <%= f.input :country_id , :label => "國家" , :prompt => false , :collection => Country.select('id , name').order('id ASC').map{|country|[country.name , country.id]} %>
+    <%= f.input :addr , :label => "地址" %>
+  </div>
+  <div class="span2">
+    <%= f.input :phone, :label => "電話", :input_html => { :class => "input-medium"} %>
+    <%= f.input :fax, :label => "傳真", :input_html => { :class => "input-medium"} %>
+  </div>
+  <div class="span3">
+    <%= f.input :email, :label => "E-mail" %>
+    <%= f.input :co_no , :label => "客戶採購單編號" %>
+  </div>
+</div>
+  <div class="row-fluid">
+  <%= f.input :date, :label => "日期" %>
+</div>
+  <div class="row-fluid">
+  <div class="span8">
+    <table class="table table-bordered table-condensed item_table">
+      <thead>
+        <tr>
+          <th class="col2" style="vertical-align:middle">#</th>
+          <th class="col10" style="vertical-align:middle">Item No.</th>
+          <th class="col4">Quantity (pcs)</th>
+          <th class="col4" style="vertical-align:middle">Unit Price</th>
+          <th class="col4" style="vertical-align:middle">Amount</th>
+          <th class="col4" style="vertical-align:middle">庫存狀態</th>
+          <th class="col4" style="vertical-align:middle"></th>
+        </tr>
+      </thead>
+      <tfoot>
+        <tr>
+          <td></td>
+          <td></td>
+          <td><span class="input-mini uneditable-input sum_qty"></span></td>
+          <td></td>
+          <td><span class="input-small uneditable-input sum_amount"></span></td>
+          <td></td>
+          <td></td>        
+        </tr>
+      </tfoot>
+      <tbody>
+        <tr class="template hide" style="display:none;">
+          <td style="text-align:center"></td>
+          <td>
+            <select style="width:150px" name="order_item[item_id][]">
+              <option value="">請選擇...</option>
+              <% Item.where('is_product = true').select('id , name, price').each do |item| %>
+                <option value="<%= item.id %>" data-value="<%= item.price %>"><%= item.name%></option>
+              <% end %>
+            </select>
+          </td>
+          <td><input class="string optional input-mini" name="order_item[qty][]" type="text"></td>
+          <td><input class="string optional input-mini" name="order_item[price][]" type="text"></td>
+          <td><span class="amount input-small uneditable-input"></span></td>
+          <td class="inv"></td>
+          <td><a class="del_row">刪除</a>  <a class="add_row">增加</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="row-fluid">
+  <%= f.input :note, :label => "訂單備註", :input_html =>{:class => "span8",:rows => 5} %>
+</div>
+<div class="control-group offset10"><div class="controls"><label></label><%= f.button :button, '清除', :type => 'reset', :class => 'btn btn-red' %>&nbsp;<%= f.button :submit , :value => '送出' , :class => 'btn btn-green' %></div></div>

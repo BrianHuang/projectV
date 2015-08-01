@@ -1,0 +1,7 @@
+<%= f.input :date, :label => "異動日期"%>
+<%= f.input :item_id , :label => "產品型號" , :prompt => false , :collection => Item.select('id,name').where('is_product = true').order('name ASC').map{|item|[item.name,item.id]}%>
+<%= f.input :qty , :label => "異動數量" %>
+<%= f.input :inv_entry_cate_id , :label => "異動原因" , :prompt => false , :collection => Cate.select('id , name').where('is_inv_entry = true').order('id ASC').map{|cate|[cate.name , cate.id]} %>
+<%= f.input :order_id , :label => "出貨訂單編號"%>
+<%= f.input :note ,:label => "備註"%>
+<div class="control-group"><div class="controls"><label></label><%= f.button :button, '清除', :type => 'reset', :class => 'btn btn-red' %>&nbsp;<%= f.button :submit , :value => '送出' , :class => 'btn btn-green' %></div></div>

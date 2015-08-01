@@ -1,0 +1,35 @@
+<section class="row-fluid">
+  <h3 class="box-header">庫存異動列表</h3>
+  <div class="box">
+    <div class="box-action btn-group">
+      <%= link_to "新增" , new_inv_entry_path , :class => "btn btn-blue" %>
+    </div>
+    <table class="table table-bordered table-striped table-condensed table-hover">
+      <thead>
+        <tr>
+          <th class="col4">ID</th>
+          <th class="col4">日期</th>
+          <th class="col10">異動型號</th>
+          <th class="col4">異動原因</th>
+          <th class="col4">異動數量</th>
+          <th class="col6">管理</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @inv_entries.each do |inv_entry| %>                     
+          <tr>
+            <td class="center"><%= inv_entry.id %></td>
+            <td class="center"><%= inv_entry.date %></td>
+            <td class="center"><%= link_to inv_entry.item_name, "/inventories/#{inv_entry.item_id}"%></td>
+            <td class="center"><%= inv_entry.cate_name %></td>
+            <td class="center"><%= inv_entry.qty %></td>
+            <td class="center">
+              <%= link_to "編輯" , edit_inv_entry_path(inv_entry) , :class => "btn btn-cyan" %>
+              <%= link_to "刪除" , inv_entry_path(inv_entry) , :method => "delete" , :class => "btn btn-danger" , :"data-confirm" => "確定進行刪除的動作？" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</section>

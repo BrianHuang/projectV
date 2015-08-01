@@ -1,0 +1,9 @@
+<section class="row-fluid">
+  <h3 class="box-header">新增</h3>
+  <div class="box"><div class="well">
+    <div class="box-action btn-group"><%= link_to "回到列表頁" , items_path , :class => "btn btn-green" %></div>
+    <%= simple_form_for(@item , :url => items_path , :html => {:class => 'form-horizontal'}) do |f| %>
+      <%= render :partial => "form", :locals => { :f => f } %>
+    <% end %>
+  </div></div>
+</section>

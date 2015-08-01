@@ -1,0 +1,9 @@
+<%= raw(will_paginate(@paginate , :inner_window => (@paginate_inner_window || 7) , :show_total => true , :renderer => PaginationListLinkRenderer)) if @paginate %>
+
+<footer id="main-footer">
+  Copyright © <%= Time.now.year %>
+  <a href="#">Vespark.com</a> , all rights reserved.
+  <a href="#" class="pull-right" id="on-top-link">
+    On Top &nbsp;<i class=" icon-chevron-up"></i>
+  </a>
+</footer>

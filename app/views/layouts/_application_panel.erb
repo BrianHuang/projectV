@@ -1,0 +1,52 @@
+<nav id="left-panel">
+  <div id="left-panel-content">
+    <ul>
+      <li ><a href="#"><span class="icon-dashboard"></span>dashboard</a></li>
+      <li class="lp-dropdown <%= pick_c('cates' , 'items') %>">
+        <a href="#" class="lp-dropdown-toggle" id="pages-dropdown0"><span class="icon-desktop"></span>資料建檔管理</a>
+        <ul class="lp-dropdown-menu simple" data-dropdown-owner="pages-dropdown0">
+          <li class="<%= pick_c('cates') %>">
+            <a href="/cates" tabindex="-1" ><i class="icon-picture"></i>&nbsp;&nbsp;零件分類管理</a>
+          </li>
+          <li class="<%= pick_c('product_cates') %>">
+            <a href="/product_cates" tabindex="-1" ><i class="icon-picture"></i>&nbsp;&nbsp;預熱塞分類管理</a>
+            </li>
+          <li class="<%= pick_c('part_items') %>">
+            <a href="/part_items" tabindex="-1" ><i class="icon-picture"></i>&nbsp;&nbsp;零組件檔案管理</a></li>
+          <li class="<%= pick_c('customers') %>">
+              <a href="/customers" tabindex="-1" ><i class="icon-picture"></i>&nbsp;&nbsp;客戶資料管理</a></li>
+        </ul>        
+      </li>
+      <li class="lp-dropdown">
+        <a href="#" class="lp-dropdown-toggle" id="pages-dropdown1"><span class="icon-cogs"></span>製程管理</a>
+        <ul class="lp-dropdown-menu simple" data-dropdown-owner="pages-dropdown1">
+          <li class="">
+            <a href="/spec_cates" tabindex="-1" ><i class="icon-picture"></i>&nbsp;&nbsp;製程分類管理</a>
+          </li>
+          <li class="<%= pick_c('specs') %>">
+            <a href="/specs" tabindex="-1" ><i class="icon-picture"></i>&nbsp;&nbsp;製程欄位管理</a></li>
+          <li class="<%= pick_c('items') %>">
+            <a href="/items" tabindex="-1" ><i class="icon-picture"></i>&nbsp;&nbsp;預熱塞製程檔案管理</a></li>
+        </ul>
+      </li>
+      <li class=""><a href="/orders"><span class="icon-file"></span>訂單列表</a></li>
+      <li class="lp-dropdown">
+        <a href="#" class="lp-dropdown-toggle" id="pages-dropdown2"><span class="icon-edit"></span>庫存管理</a>
+        <ul class="lp-dropdown-menu simple" data-dropdown-owner="pages-dropdown2">
+          <li class="">
+            <a href="/inventories" tabindex="-1" ><i class="icon-picture"></i>&nbsp;&nbsp;產品庫存列表</a>
+          </li>
+          <li class="">
+            <a href="/inv_entries" tabindex="-1" ><i class="icon-picture"></i>&nbsp;&nbsp;庫存異動分錄</a>
+          </li>
+          <li class="<%= pick_c('inv_entry_cates') %>">
+            <a href="/inv_entry_cates" tabindex="-1" ><i class="icon-picture"></i>&nbsp;&nbsp;庫存異動原因管理</a>
+          </li>
+        </ul>
+      </li>
+      <li class=""><a href="#"><span class="icon-search"></span>規格查詢</a></li>
+    </ul>
+  </div>
+  <div class="icon-caret-down"></div>
+  <div class="icon-caret-up"></div>
+</nav>

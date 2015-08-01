@@ -1,0 +1,25 @@
+<h1> <%= @item.name %></h1>
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+    </tr>
+  </thead>
+  <tfoot><tr></tr></tfoot>
+  <tbody>
+  <% @item.item_specs.each do |p| %>
+    <tr>
+      <td><%= p.spec.name %></td>
+      <td><%= 
+        if p.value.present? 
+          p.value
+        elsif p.part.present?
+          p.part.name
+        end
+          %>
+        </td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>

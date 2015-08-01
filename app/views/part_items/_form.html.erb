@@ -1,0 +1,4 @@
+<%= f.input :name , :label => "零組件名稱" %>
+<%= f.input :cate_id , :label => "零組件分類" , :prompt => false , :collection => Cate.select('id , name').where('is_product = false AND is_spec = false').order('id ASC').map{|cate|[cate.name , cate.id]} %>
+<%= f.input :is_product , :as => :hidden, :input_html => { :value => 'false'} %>
+<div class="control-group"><div class="controls"><label></label><%= f.button :button, '清除', :type => 'reset', :class => 'btn btn-red' %>&nbsp;<%= f.button :submit , :value => '送出' , :class => 'btn btn-green' %></div></div>

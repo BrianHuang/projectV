@@ -1,0 +1,10 @@
+<%= f.input :name , :label => "名稱" %>
+<%= f.input :order , :label => "排序" %>
+<%= f.hidden_field :is_part, value: "true" %>
+<div class="control-group">
+  <div class="controls">
+    <label></label>
+    <%= f.button :button, '清除', :type => 'reset', :class => 'btn btn-red' %>&nbsp;
+    <%= f.button :submit , :value => '送出' , :class => 'btn btn-green' %>
+  </div>
+</div>

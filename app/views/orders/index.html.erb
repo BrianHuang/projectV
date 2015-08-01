@@ -1,0 +1,40 @@
+
+<section class="row-fluid">
+  <h3 class="box-header">訂單列表</h3>
+  <div class="box">
+    <div class="box-action btn-group">
+      <%= link_to "新增" , new_order_path , :class => "btn btn-blue" %>
+    </div>
+    <table class="table table-bordered table-striped table-condensed table-hover">
+      <thead>
+        <tr>
+          <th class="col2">訂單編號</th>
+          <th class="col2">狀態</th>
+          <th class="col3">國家</th>
+          <th class="col2">名稱</th>
+          <th class="col2">聯絡人</th>
+          <th class="col1">E-mail</th>
+          <th class="col2">備註</th>
+          <th class="col1">管理</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @orders.each do |order| %>                     
+          <tr>
+            <td class="center"><a href="orders/<%= order.id %>"><%= order.id %></a></td>
+            <td class="center"><%= order.state %></td>
+            <td class="center"><%= order.customer_country %></td>
+            <td class="center"><%= order.name %></td>
+            <td class="center"><%= order.contact %></td>
+            <td class="center"><%= order.email %></td>
+            <td class="center"><%= order.note %></td>            
+            <td class="center">
+              <%= link_to "編輯" , edit_order_path(order) , :class => "btn btn-cyan" %>
+              <%= link_to "刪除" , order_path(order) , :method => "delete" , :class => "btn btn-danger" , :"data-confirm" => "確定進行刪除的動作？" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</section>

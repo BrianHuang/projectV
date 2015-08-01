@@ -1,0 +1,5 @@
+<%= f.input :name , :label => "製程欄位名稱" %>
+<%= f.input :cate_id , :label => "製程分類" , :prompt => false , :collection => Cate.select('id , name').where('is_spec = true').order('id ASC').map{|cate|[cate.name , cate.id]} %>
+<%= f.input :is_part , :label => "是否為零組件" %>
+<%= f.input :part_cate_id , :label => "零組件分類" , :prompt => false , :collection => Cate.select('id , name').where('is_part = true').order('id ASC').map{|cate|[cate.name , cate.id]} %>
+<div class="control-group"><div class="controls"><label></label><%= f.button :button, '清除', :type => 'reset', :class => 'btn btn-red' %>&nbsp;<%= f.button :submit , :value => '送出' , :class => 'btn btn-green' %></div></div>

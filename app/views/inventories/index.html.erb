@@ -1,0 +1,29 @@
+<section class="row-fluid">
+  <h3 class="box-header">庫存列表</h3>
+  <div class="box">
+    <table class="table table-bordered table-striped table-condensed table-hover">
+      <thead>
+        <tr>
+          <th class="col6">ID</th>
+          <th class="col10">名稱</th>
+          <th class="col10">Reference No.</th>
+          <th class="col6">目前庫存量</th>
+          <th class="col6">管理</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @inventories.each do |item| %>                     
+          <tr>
+            <td class="center"><%= item.id %></td>
+            <td class="center"><%= link_to item.name, "/inventories/#{item.id}"%></td>
+            <td class="center"><%= item.ref_no %></td>
+            <td class="center"><%= item.inv %></td>
+            <td class="center">
+              <%= link_to "調整庫存" , new_inv_entry_path(:item_id => item.id) , :class => "btn btn-cyan" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</section>

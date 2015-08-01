@@ -1,0 +1,35 @@
+.pagination{
+  text-align:center;
+}
+header .dropdown-menu{
+  min-width:0;
+  text-align:right;
+}
+.table .btn{
+  padding:1px 4px;
+}
+.table td , .table th{
+  vertical-align:middle;
+}
+.table th , .table td.center , .center{
+  text-align:center;
+}
+.table .col1{width:10px;}
+.table .col2{width:30px;}
+.table .col3{width:50px;}
+.table .col4{width:70px;}
+.table .col5{width:90px;}
+.table .col6{width:110px;}
+.table .col7{width:130px;}
+.table .col8{width:150px;}
+.table .col9{width:170px;}
+.table .col10{width:190px;}
+
+.box-action{
+  margin:-12px 0 8px 0;
+  width:100%;
+  text-align:right;
+}
+.pagination{
+  margin-top:0;
+}

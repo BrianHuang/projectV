@@ -1,0 +1,92 @@
+<% content_for :header do %>
+<script>
+jQuery(function($){
+  $('.cate_select').change(function(){
+    console.log($(this).val());
+  });
+});
+</script>
+<% end %>
+
+<%= f.input :name , :label => "預熱塞名稱" %>
+<%= f.input :cate_id , :label => "預熱塞分類" , :prompt => false , :collection => Cate.select('id , name').where('is_product = true').order('id ASC').map{|cate|[cate.name , cate.id]} %>
+<%= f.input :is_product , :as => :hidden, :input_html => { :value => 'true'} %>
+<%= f.input :ref_no , :label => "Reference No." %>
+<%= f.input :price , :label => "定價" %>
+<%
+  attr_set = {};
+  if f.object.id
+    
+    item_specs = Spec.joins("Left JOIN item_specs on specs.id = item_specs.spec_id").select("specs.* , item_specs.value AS value ,item_specs.part_id AS part_id").where("item_specs.item_id = #{f.object.id}")
+    
+    item_specs.each do |s|
+      
+      if s.is_part
+        attr_set[s.id] = s.part_id
+      else
+        attr_set[s.id] = s.value       
+      end
+    end
+    
+    #Rails.logger.debug("My Debug object: #{attr_set.inspect}")
+  
+  end
+  # cate_options = ""
+  # Cate.where('is_product != 1 AND is_spec != 1').order('`order`').each do |cate|
+  #   cate_options += "<option value='#{cate.id}'>#{cate.name}</option>"
+  # end
+  # Item.where('is_product != 1').order('name').each do |i|
+  #   item_options += "<option value='#{i.id}'>#{i.name}</option>"
+  # end
+  
+  spec_cate_id_set = Spec.where('is_part = 1').select('id , part_cate_id').map{|s|s.part_cate_id}.uniq;
+  spec_item_set = {}
+  unless spec_cate_id_set.empty?
+    Item.select('id , name , cate_id').where("cate_id IN (#{spec_cate_id_set.join(',')}) ").order('id').each do |item|
+      spec_item_set[item.cate_id] ||= []
+      spec_item_set[item.cate_id] << item
+      
+      # spec_item_set[item.cate_id] = [] if !spec_item_set[item.cate_id]
+      
+    end
+  end
+  cate_item = {}
+# Item.where('is_product != 1 AND cate_id IN (#{spec_cate_set.join(,)})').each do |item|
+#     cate_item[item.cate_id] ||= [];
+#     cate_item[item.cate_id] << item
+#   end
+#     
+#   cate_item = {
+#     1 = [item(1) , item(3)...],
+#     5 = [item(20) , item(3)...],
+#     7 = [item(99) , item(3)...],
+#     9 = [item(1) , item(3)...]
+#   }
+%>
+<% Spec.order('cate_id').each do |spec| %>
+  <div class="control-group string optional item_name">
+    <label class="string optional control-label" for="item_name"><%= spec.name %></label>
+    <div class="controls">
+      <% if spec.is_part %>
+        <select class="item_select" name="spec[<%= spec.id %>]">
+          <option value="">請選擇...</option>
+          <% if spec_item_set[spec.part_cate_id] %>
+            <% spec_item_set[spec.part_cate_id].each do |item| %>
+            
+              <% if attr_set[spec.id] == item.id %>
+                <option value="<%= item.id %>" selected="selected"><%= item.name %></option>
+              <% else%>
+                <option value="<%= item.id %>"><%= item.name %></option>
+              <% end %>    
+            <% end%>
+          <% else %>
+            <option>請建立資料</option>
+          <% end %>
+        </select>
+      <% else %>
+        <input class="string optional" id="item_name" name="spec[<%= spec.id %>]" type="text" value="<%= attr_set[spec.id] ? attr_set[spec.id] : '' %>">
+      <% end %>
+    </div>
+  </div>
+<% end %>
+<div class="control-group"><div class="controls"><label></label><%= f.button :button, '清除', :type => 'reset', :class => 'btn btn-red' %>&nbsp;<%= f.button :submit , :value => '送出' , :class => 'btn btn-green' %></div></div>
